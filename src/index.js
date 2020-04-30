@@ -62,13 +62,14 @@ Content Cell  | Content Cell
             value,
             confluenceValue: m2c(value).replace(/\n\n$/, '')
         })
+		document.getElementById("btn-copy").innerHTML = "点此复制";
     }
 
     copy () {
         let content = document.getElementById("content")
         content.select()
         document.execCommand('Copy')
-        alert('复制成功')
+		document.getElementById("btn-copy").innerHTML = "复制成功";
     }
 
     save () {
@@ -88,7 +89,7 @@ Content Cell  | Content Cell
             <div className="wrapper">
                 <Editor className="markdown-editor" lineNum={true} value={value} onChange={this.handleChange.bind(this)} onSave={this.save.bind(this)} />
                 <div className="confluence-editor">
-                    <button className="copy-btn" onClick={this.copy.bind(this)}>Copy</button>
+                    <button id="btn-copy" className="copy-btn" onClick={this.copy.bind(this)}>点此复制</button>
                     <textarea readOnly id="content" className="content" value={confluenceValue}></textarea>
                 </div>
             </div>

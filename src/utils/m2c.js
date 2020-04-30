@@ -9,7 +9,7 @@ var inlineLexer = marked.inlineLexer
 // https://confluence.atlassian.com/display/DOC/Confluence+Wiki+Markup
 // http://blogs.atlassian.com/2011/11/why-we-removed-wiki-markup-editor-in-confluence-4/
 
-var MAX_CODE_LINE = 20
+var MAX_CODE_LINE = 50
 
 function Renderer () { }
 
@@ -45,12 +45,13 @@ _.extend(Renderer.prototype, rawRenderer.prototype, {
 		return '-' + text + '-'
 	}
 	, codespan: function (text) {
-		return '{{' + text + '}}'
+		return '{{' + text.replace(/^--/, '\\--').replace('$', '\\$').replace('{', '\\{').replace('}', '\\}') + '}}'
 	}
 	, blockquote: function (quote) {
 		return '{quote}' + quote + '{quote}'
 	}
 	, br: function () {
+		console.log("BENZZZZZ br")
 		return '<br>'
 	}
 	, hr: function () {
@@ -69,7 +70,7 @@ _.extend(Renderer.prototype, rawRenderer.prototype, {
 		})
 		var type = ordered ? '#' : '*'
 		return _.map(arr, function (line) {
-			return type + ' ' + line
+			return type + ' ' + line.replace(/<br>/g, '\n').replace(/<br \/>/g, '\n')
 		}).join('\n') + '\n\n'
 
 	}
@@ -94,7 +95,7 @@ _.extend(Renderer.prototype, rawRenderer.prototype, {
 		if (lang) {
 			lang = lang.toLowerCase()
 		}
-		lang = langMap[lang] || 'none'
+		lang = langMap[lang] || 'bash'
 		var param = {
 			language: lang,
 			borderStyle: 'solid',
